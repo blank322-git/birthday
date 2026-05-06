@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Для тебя 🎁</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+  overflow: hidden;
+}
+
+#start, #loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#loading { display: none; }
+
+button {
+  padding: 15px 30px;
+  font-size: 20px;
+  background: red;
+  border: none;
+  border-radius: 10px;
+  color: white;
+}
+
+#content {
+  display: none;
+  margin-top: 10%;
+  opacity: 0;
+  transition: 1s;
+}
+
+img {
+  width: 220px;
+  border-radius: 15px;
+  margin-top: 20px;
+  opacity: 0;
+  transition: 1s;
+}
+
+.heart {
+  position: absolute;
+  animation: float 5s linear infinite;
+}
+
+@keyframes float {
+  0% {transform: translateY(100vh);}
+  100% {transform: translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
+  <h2>Включи звук и нажми 👇</h2>
+  <button onclick="start()">Нажми 🎁</button>
+</div>
+
+<div id="loading">
+  <h2>Подготовка...</h2>
+  <p id="percent">0%</p>
+</div>
+
+<div id="content">
+  <h1>С днём рождения, Мика 🎉</h1>
+  <p id="text"></p>
+  <img id="photo">
+</div>
+
+<audio id="music" loop>
+  <source src="musik.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let photos = [
+  "1.jpg",
+  "2.jpg",
+  "3.jpg",
+  "4.jpg"
+];
+
+function start() {
+  document.getElementById("start").style.display = "none";
+  document.getElementById("loading").style.display = "flex";
+
+  let music = document.getElementById("music");
+  music.volume = 0.5;
+  music.play();
+
+  load();
+}
+
+function load() {
+  let p = 0;
+  let interval = setInterval(() => {
+    p++;
+    document.getElementById("percent").innerText = p + "%";
+
+    if (p >= 100) {
+      clearInterval(interval);
+      document.getElementById("loading").style.display = "none";
+
+      let content = document.getElementById("content");
+      content.style.display = "block";
+      setTimeout(() => content.style.opacity = "1", 100);
+
+      typing();
+      showPhotos();
+      hearts();
+    }
+  }, 30);
+}
+
+let message = `Мика, поздравляю тебя с днём рождения 🎉 Желаю тебе счастья, здоровья и чтобы ты как можно меньше плакала.
+<br>
+Пусть у тебя всё получится.
+<br>
+Я правда рад, что встретил тебя и хочу, чтобы у нас получилось и в жизни ❤️`;
+
+let i = 0;
+
+function typing() {
+  if (i < message.length) {
+    let char = message.charAt(i);
+    if (char === '<') {
+      // Пропускаем HTML-теги
+      let tagEnd = message.indexOf('>', i);
+      let tag = message.substring(i, tagEnd + 1);
+      document.getElementById("text").innerHTML += tag;
+      i = tagEnd + 1;
+    } else {
+      document.getElementById("text").innerHTML += char;
+      i++;
+    }
+    setTimeout(typing, 75);
+  }
+}
+
+let index = 0;
+
+function showPhotos() {
+  let img = document.getElementById("photo");
+
+  setInterval(() => {
+    img.src = photos[index];
+    img.style.opacity = "0";
+
+    setTimeout(() => {
+      img.style.opacity = "1";
+    }, 200);
+
+    index = (index + 1) % photos.length;
+  }, 2500);
+}
+
+function hearts() {
+  setInterval(() => {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+  }, 250);
+}
+</script>
+
+</body>
+</html>
