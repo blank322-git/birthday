@@ -44,8 +44,8 @@ button {
   margin-top: 5%;
   opacity: 0;
   transition: 1s;
-  overflow-y: auto;  /* ← скролл внутри контента */
-  max-height: 80vh;  /* ← ограничиваем высоту */
+  overflow-y: auto;
+  max-height: 80vh;
   padding: 20px;
 }
 
@@ -79,10 +79,9 @@ img {
     opacity: 0;
   }
 }
-
 </style>
-</head>
 
+</head>
 <body>
 
 <div id="start">
@@ -157,7 +156,6 @@ function typing() {
   if (i < message.length) {
     let char = message.charAt(i);
     if (char === '<') {
-      // Пропускаем HTML-теги
       let tagEnd = message.indexOf('>', i);
       let tag = message.substring(i, tagEnd + 1);
       document.getElementById("text").innerHTML += tag;
